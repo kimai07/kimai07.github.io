@@ -3,15 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://kenji-imi.github.io/categories/</loc>
+    <loc>https://kenji-imi.net/post/first/</loc>
+    <lastmod>2019-09-07T18:02:09+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://kenji-imi.github.io/</loc>
+    <loc>https://kenji-imi.net/</loc>
+    <lastmod>2019-09-07T18:02:09+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://kenji-imi.github.io/tags/</loc>
+    <loc>https://kenji-imi.net/post/</loc>
+    <lastmod>2019-09-07T18:02:09+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kenji-imi.net/tags/</loc>
   </url>
   
 </urlset>
