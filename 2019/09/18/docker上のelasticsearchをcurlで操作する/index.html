@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.58.2" />
+
+
+<title>Docker上のElasticsearchをcurlで操作する - きまいのテックろぐ</title>
+<meta property="og:title" content="Docker上のElasticsearchをcurlで操作する - きまいのテックろぐ">
+
+
+  <link href='https://kenji-imi.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://kenji-imi.github.io/images/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" href="https://kenji-imi.github.io/css/main.css" media="all">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400|Lato:400,400italic,700">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="https://kenji-imi.github.io/" class="nav-logo">
+    <img src="https://kenji-imi.github.io/images/ki.png" 
+         width="50" 
+         height="50" 
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/profile/">Profile</a></li>
+    
+    <li><a href="https://github.com/kenji-imi">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/kenji_imi">Twitter</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/kenji-imai-87a74741/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Docker上のElasticsearchをcurlで操作する</h1>
+
+    
+    <span class="article-date">September 18, 2019</span>
+    
+
+    <div class="article-content">
+      
+
+<h2 id="概要">概要</h2>
+
+<p>Docker 上の Elasticsearch を curl で API 操作してみます。</p>
+
+<h2 id="環境">環境</h2>
+
+<pre><code class="language-sh">$ sw_vers
+ProductName:	Mac OS X
+ProductVersion:	10.14.6
+BuildVersion:	18G87
+</code></pre>
+
+<h2 id="elasticsearch-用-docker-compose">Elasticsearch 用 docker-compose</h2>
+
+<p>今回は、docker コンテナを起動して、その中で Elasticsearch を起動します。
+docker コンテナを起動するために、docker-compose を利用します。
+Elasticsearch 用の Docker イメージや docker-compose.yml 等の情報は以下公式ドキュメントにまとまっています。</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">Install Elasticsearch with Docker | Elasticsearch Reference | Elastic</a></li>
+</ul>
+
+<p>今回用いる docker-compose.yml は以下。</p>
+
+<pre><code class="language-yaml">version: &quot;3.3&quot;
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    container_name: es01
+    environment:
+      - &quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&quot;
+      - &quot;discovery.type=single-node&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+
+volumes:
+  esdata01:
+    driver: local
+
+networks: esnet:
+</code></pre>
+
+<p>Docker コンテナ起動</p>
+
+<pre><code>$ docker-compose up
+</code></pre>
+
+<h2 id="curl-で起動確認">curl で起動確認</h2>
+
+<p>Elasticsearch が起動されているかどうか curl で確認します。
+デフォルトでは 9200 番ポートで API を利用。</p>
+
+<pre><code class="language-sh">$ curl localhost:9200
+{
+  &quot;name&quot; : &quot;753d7d8524f6&quot;,
+  &quot;cluster_name&quot; : &quot;docker-cluster&quot;,
+  &quot;cluster_uuid&quot; : &quot;YVCIA1RzROi-AQ80Csa5CQ&quot;,
+  &quot;version&quot; : {
+    &quot;number&quot; : &quot;7.3.0&quot;,
+    &quot;build_flavor&quot; : &quot;default&quot;,
+    &quot;build_type&quot; : &quot;docker&quot;,
+    &quot;build_hash&quot; : &quot;de777fa&quot;,
+    &quot;build_date&quot; : &quot;2019-07-24T18:30:11.767338Z&quot;,
+    &quot;build_snapshot&quot; : false,
+    &quot;lucene_version&quot; : &quot;8.1.0&quot;,
+    &quot;minimum_wire_compatibility_version&quot; : &quot;6.8.0&quot;,
+    &quot;minimum_index_compatibility_version&quot; : &quot;6.0.0-beta1&quot;
+  },
+  &quot;tagline&quot; : &quot;You Know, for Search&quot;
+}
+</code></pre>
+
+<p>9200 ポート確認</p>
+
+<pre><code class="language-sh">$ lsof -i:9200
+COMMAND    PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+com.docke 1502 user   17u  IPv6 0x3e5fb7c38bbe7217      0t0  TCP *:wap-wsp (LISTEN)
+</code></pre>
+
+<h2 id="インデックス作成">インデックス作成</h2>
+
+<p>データ投入・検索を行う前にインデックスを作成します。
+ここでは、インデックス名 <code>product</code> で作成。</p>
+
+<pre><code class="language-sh">$ curl -XPUT localhost:9200/product
+{&quot;acknowledged&quot;:true,&quot;shards_acknowledged&quot;:true,&quot;index&quot;:&quot;product&quot;}
+</code></pre>
+
+<p>上記コマンドの実行結果は、ワンラインで表示されるために見づらくなってしまいます。
+見やすくするために、次のように<code>?pretty</code>を付与することで整形することが出来ます。（ <code>| jq .</code> でも同様）</p>
+
+<pre><code class="language-sh">$ curl -XPUT 'localhost:9200/product?pretty'
+{
+  &quot;acknowledged&quot; : true,
+  &quot;shards_acknowledged&quot; : true,
+  &quot;index&quot; : &quot;product&quot;
+}
+</code></pre>
+
+<p>すでに作成済みのインデックスを作成しようとするとエラーになります。</p>
+
+<pre><code class="language-sh">$ curl -XPUT 'localhost:9200/product?pretty'
+{
+  &quot;error&quot; : {
+    &quot;root_cause&quot; : [
+      {
+        &quot;type&quot; : &quot;resource_already_exists_exception&quot;,
+        &quot;reason&quot; : &quot;index [product/43BfhxU6SUqNUcQ8dkDKAA] already exists&quot;,
+        &quot;index_uuid&quot; : &quot;43BfhxU6SUqNUcQ8dkDKAA&quot;,
+        &quot;index&quot; : &quot;product&quot;
+      }
+    ],
+    &quot;type&quot; : &quot;resource_already_exists_exception&quot;,
+    &quot;reason&quot; : &quot;index [product/43BfhxU6SUqNUcQ8dkDKAA] already exists&quot;,
+    &quot;index_uuid&quot; : &quot;43BfhxU6SUqNUcQ8dkDKAA&quot;,
+    &quot;index&quot; : &quot;product&quot;
+  },
+  &quot;status&quot; : 400
+}
+</code></pre>
+
+<p>その場合は、一度インデックスを消して、再度作成を行います。</p>
+
+<pre><code class="language-sh">$ curl -XDELETE 'localhost:9200/product?pretty'
+{
+  &quot;acknowledged&quot; : true
+}
+</code></pre>
+
+<p>作成されたインデックスを確認します。</p>
+
+<pre><code class="language-sh">$ curl 'localhost:9200/_cat/indices?v'
+health status index   uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   product Fz1qlOcwQyS-w0ZvKRmi4g   1   1          0            0       230b           230b
+</code></pre>
+
+<h2 id="データ投入">データ投入</h2>
+
+<p>ここでは、ドキュメントが１つも入っていない状態で、新規にドキュメント登録を行います。
+データ登録は <code>[インデックス名]/[タイプ]/[ドキュメントID]</code>  のように指定することで行うことが出来ます。</p>
+
+<pre><code class="language-sh">$ curl -H &quot;Content-Type: application/json&quot; -XPUT 'localhost:9200/product/book/1?pretty' -d '
+{
+  &quot;date&quot;: &quot;2019-09-15T18:19:57+09:00&quot;,
+  &quot;title&quot;: &quot;Elasticsearch&quot;,
+  &quot;desc&quot;: &quot;これはElasticsearchに関する商品です&quot;
+}'
+{
+  &quot;_index&quot; : &quot;product&quot;,
+  &quot;_type&quot; : &quot;book&quot;,
+  &quot;_id&quot; : &quot;1&quot;,
+  &quot;_version&quot; : 2,
+  &quot;result&quot; : &quot;updated&quot;,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 2,
+    &quot;successful&quot; : 1,
+    &quot;failed&quot; : 0
+  },
+  &quot;_seq_no&quot; : 1,
+  &quot;_primary_term&quot; : 1
+}
+</code></pre>
+
+<h2 id="検索">検索</h2>
+
+<p>登録したドキュメントを検索してみます。
+検索は <code>[インデックス名]/_search</code>  のように指定することで行うことが出来ます。
+検索キーワード・検索対象フィールドは、クエリパラメータとして <code>q=</code> の後に <code>フィールド名:検索キーワード</code> で指定できます。</p>
+
+<pre><code class="language-sh">$ curl -XGET 'localhost:9200/product/_search?q=title:Elasticsearch&amp;pretty'
+{
+  &quot;took&quot; : 564,
+  &quot;timed_out&quot; : false,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 1,
+    &quot;successful&quot; : 1,
+    &quot;skipped&quot; : 0,
+    &quot;failed&quot; : 0
+  },
+  &quot;hits&quot; : {
+    &quot;total&quot; : {
+      &quot;value&quot; : 1,
+      &quot;relation&quot; : &quot;eq&quot;
+    },
+    &quot;max_score&quot; : 0.18232156,
+    &quot;hits&quot; : [
+      {
+        &quot;_index&quot; : &quot;product&quot;,
+        &quot;_type&quot; : &quot;book&quot;,
+        &quot;_id&quot; : &quot;1&quot;,
+        &quot;_score&quot; : 0.18232156,
+        &quot;_source&quot; : {
+          &quot;date&quot; : &quot;2019-09-15T18:19:57+09:00&quot;,
+          &quot;title&quot; : &quot;Elasticsearch&quot;,
+          &quot;desc&quot; : &quot;これはElasticsearchに関する商品です&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+
+<p>また、 <code>[インデックス名]/[タイプ]/_search</code>  と指定することで 特定のタイプのドキュメントを検索することが出来ます。</p>
+
+<pre><code class="language-sh">$ curl -XGET 'localhost:9200/product/book/_search?q=title:Elasticsearch&amp;pretty'
+{
+  &quot;took&quot; : 9,
+  &quot;timed_out&quot; : false,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 1,
+    &quot;successful&quot; : 1,
+    &quot;skipped&quot; : 0,
+    &quot;failed&quot; : 0
+  },
+  &quot;hits&quot; : {
+    &quot;total&quot; : {
+      &quot;value&quot; : 1,
+      &quot;relation&quot; : &quot;eq&quot;
+    },
+    &quot;max_score&quot; : 0.18232156,
+    &quot;hits&quot; : [
+      {
+        &quot;_index&quot; : &quot;product&quot;,
+        &quot;_type&quot; : &quot;book&quot;,
+        &quot;_id&quot; : &quot;1&quot;,
+        &quot;_score&quot; : 0.18232156,
+        &quot;_source&quot; : {
+          &quot;date&quot; : &quot;2019-09-15T18:19:57+09:00&quot;,
+          &quot;title&quot; : &quot;Elasticsearch&quot;,
+          &quot;desc&quot; : &quot;これはElasticsearchに関する商品です&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+
+    </div>
+  </article>
+
+  
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="https://kenji-imi.github.io/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+
