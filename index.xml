@@ -6,10 +6,23 @@
     <description>Recent content on きまいのテックろぐ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 17 Sep 2019 09:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 18 Sep 2019 09:00:00 +0900</lastBuildDate>
     
 	<atom:link href="https://kenji-imi.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Docker上でElasticsearchをcurlで操作する</title>
+      <link>https://kenji-imi.github.io/2019/09/18/docker%E4%B8%8A%E3%81%A7elasticsearch%E3%82%92curl%E3%81%A7%E6%93%8D%E4%BD%9C%E3%81%99%E3%82%8B/</link>
+      <pubDate>Wed, 18 Sep 2019 09:00:00 +0900</pubDate>
+      
+      <guid>https://kenji-imi.github.io/2019/09/18/docker%E4%B8%8A%E3%81%A7elasticsearch%E3%82%92curl%E3%81%A7%E6%93%8D%E4%BD%9C%E3%81%99%E3%82%8B/</guid>
+      <description>概要 Docker上のElasticsearchをcurlでAPI操作してみます。
+環境 $ sw_vers ProductName:	Mac OS X ProductVersion:	10.14.6 BuildVersion:	18G87  Elasticsearch用docker-compose 今回は、dockerコンテナを起動して、その中でElasticsearchを起動します。 dockerコンテナを起動するために、docker-composeを利用します。 Elasticsearch用のDockerイメージやdocker-compose.yml等の情報は以下公式ドキュメントにまとまっています。
+ Install Elasticsearch with Docker | Elasticsearch Reference | Elastic  今回用いるdocker-compose.ymlは以下。
+version: &amp;quot;3.3&amp;quot; services: es01: image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0 container_name: es01 environment: - &amp;quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&amp;quot; - &amp;quot;discovery.type=single-node&amp;quot; ulimits: memlock: soft: -1 hard: -1 volumes: - esdata01:/usr/share/elasticsearch/data ports: - 9200:9200 networks: - esnet volumes: esdata01: driver: local networks: esnet:  Dockerコンテナ起動
+$ docker-compose up  curlで起動確認 Elasticsearchが起動されているかどうかcurlで確認します。 デフォルトでは9200番ポートでAPIを利用。</description>
+    </item>
     
     <item>
       <title>Elasticsarchについて</title>
