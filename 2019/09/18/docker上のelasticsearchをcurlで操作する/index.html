@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Hugo 0.58.2" />
+<meta name="generator" content="Hugo 0.58.3" />
 
 
 <title>Docker上のElasticsearchをcurlで操作する - きまいのテックろぐ</title>
@@ -55,7 +55,7 @@
 
   <article class="article">
     
-    <span class="article-duration">3 min read</span>
+    <span class="article-duration">5 min read</span>
     
 
     <h1 class="article-title">Docker上のElasticsearchをcurlで操作する</h1>
@@ -211,6 +211,14 @@ health status index   uuid                   pri rep docs.count docs.deleted sto
 yellow open   product Fz1qlOcwQyS-w0ZvKRmi4g   1   1          0            0       230b           230b
 </code></pre>
 
+<p>APIリファレンス</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html">Create index API</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html">Delete index API</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html">cat APIs</a></li>
+</ul>
+
 <h2 id="データ投入">データ投入</h2>
 
 <p>ここでは、ドキュメントが１つも入っていない状態で、新規にドキュメント登録を行います。
@@ -237,6 +245,12 @@ yellow open   product Fz1qlOcwQyS-w0ZvKRmi4g   1   1          0            0    
   &quot;_primary_term&quot; : 1
 }
 </code></pre>
+
+<p>APIリファレンス</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html">Index API</a></li>
+</ul>
 
 <h2 id="検索">検索</h2>
 
@@ -309,6 +323,189 @@ yellow open   product Fz1qlOcwQyS-w0ZvKRmi4g   1   1          0            0    
       }
     ]
   }
+}
+</code></pre>
+
+<p>APIリファレンス</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html">Search</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html">URI Search</a></li>
+<li>細かく検索条件をしていたい場合は以下を使用する
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html">Request Body Search</a></li>
+</ul></li>
+</ul>
+
+<h2 id="ドキュメント更新">ドキュメント更新</h2>
+
+<p>今度はドキュメントIDが1のtitleフィールドを更新します。</p>
+
+<pre><code class="language-sh">$ curl -H &quot;Content-Type: application/json&quot; -XPOST 'localhost:9200/product/book/1/_update?pretty' -d '
+{
+  &quot;doc&quot; : {
+      &quot;title&quot; : &quot;Elasticsearch v7.3&quot;
+  }
+}'
+</code></pre>
+
+<p>更新後もう一度検索してみると、titleフィールドの取得値が更新されていることが確認できます。</p>
+
+<pre><code class="language-sh">$ curl -XGET 'localhost:9200/product/_search?q=title:Elasticsearch&amp;pretty'
+{
+  &quot;took&quot; : 7,
+  &quot;timed_out&quot; : false,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 1,
+    &quot;successful&quot; : 1,
+    &quot;skipped&quot; : 0,
+    &quot;failed&quot; : 0
+  },
+  &quot;hits&quot; : {
+    &quot;total&quot; : {
+      &quot;value&quot; : 1,
+      &quot;relation&quot; : &quot;eq&quot;
+    },
+    &quot;max_score&quot; : 0.2876821,
+    &quot;hits&quot; : [
+      {
+        &quot;_index&quot; : &quot;product&quot;,
+        &quot;_type&quot; : &quot;book&quot;,
+        &quot;_id&quot; : &quot;1&quot;,
+        &quot;_score&quot; : 0.2876821,
+        &quot;_source&quot; : {
+          &quot;date&quot; : &quot;2019-09-15T18:19:57+09:00&quot;,
+          &quot;title&quot; : &quot;Elasticsearch v7.3&quot;,
+          &quot;desc&quot; : &quot;これはElasticsearchに関する商品です&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+
+<p>APIリファレンス</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html">Update API</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update-by-query.html">Update By Query API</a></li>
+</ul>
+
+<h2 id="ドキュメント削除">ドキュメント削除</h2>
+
+<p>最後に、更新したドキュメントを削除してみます。</p>
+
+<pre><code>$ curl -XDELETE 'localhost:9200/product/book/1?pretty'
+{
+  &quot;_index&quot; : &quot;product&quot;,
+  &quot;_type&quot; : &quot;book&quot;,
+  &quot;_id&quot; : &quot;1&quot;,
+  &quot;_version&quot; : 4,
+  &quot;result&quot; : &quot;deleted&quot;,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 2,
+    &quot;successful&quot; : 1,
+    &quot;failed&quot; : 0
+  },
+  &quot;_seq_no&quot; : 3,
+  &quot;_primary_term&quot; : 2
+}
+</code></pre>
+
+<p>削除後にもう一度検索してみると、先程までヒットしていたドキュメントがヒットしなくなり、ドキュメントが正しく削除されていることが確認できます。</p>
+
+<pre><code class="language-sh">$ curl -XGET 'localhost:9200/product/_search?q=title:Elasticsearch&amp;pretty'
+{
+  &quot;took&quot; : 713,
+  &quot;timed_out&quot; : false,
+  &quot;_shards&quot; : {
+    &quot;total&quot; : 1,
+    &quot;successful&quot; : 1,
+    &quot;skipped&quot; : 0,
+    &quot;failed&quot; : 0
+  },
+  &quot;hits&quot; : {
+    &quot;total&quot; : {
+      &quot;value&quot; : 0,
+      &quot;relation&quot; : &quot;eq&quot;
+    },
+    &quot;max_score&quot; : null,
+    &quot;hits&quot; : [ ]
+  }
+}
+</code></pre>
+
+<p>APIリファレンス</p>
+
+<ul>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html">Delete API</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete-by-query.html">Delete by query API</a></li>
+</ul>
+
+<h2 id="エラーメモ">エラーメモ</h2>
+
+<p>APIリクエストを試す中でエラーとなったケースを列挙していく</p>
+
+<h4 id="ドキュメント更新リクエスト">ドキュメント更新リクエスト</h4>
+
+<p>フィールド指定が正しくない場合</p>
+
+<pre><code class="language-sh">$ curl -H &quot;Content-Type: application/json&quot; -XPOST 'localhost:9200/product/book/1/_update?pretty' -d '
+{
+  &quot;doc&quot; : {
+      &quot;title&quot; : &quot;Elasticsearch v7.3&quot;
+  }
+}'
+{
+  &quot;error&quot; : {
+    &quot;root_cause&quot; : [
+      {
+        &quot;type&quot; : &quot;x_content_parse_exception&quot;,
+        &quot;reason&quot; : &quot;[1:2] [UpdateRequest] unknown field [title], parser not found&quot;
+      }
+    ],
+    &quot;type&quot; : &quot;x_content_parse_exception&quot;,
+    &quot;reason&quot; : &quot;[1:2] [UpdateRequest] unknown field [title], parser not found&quot;
+  },
+  &quot;status&quot; : 400
+}
+</code></pre>
+
+<p>titleフィールドの指定で、 title文字列を <code>&quot;</code> で囲まなかった場合</p>
+
+<pre><code class="language-sh">$ curl -H &quot;Content-Type: application/json&quot; -XPOST 'localhost:9200/product/book/1/_update?pretty' -d '
+{
+  &quot;doc&quot; : {
+      &quot;title&quot; : &quot;Elasticsearch v7.3&quot;
+  }
+}'
+{
+  &quot;error&quot; : {
+    &quot;root_cause&quot; : [
+      {
+        &quot;type&quot; : &quot;json_parse_exception&quot;,
+        &quot;reason&quot; : &quot;Unexpected character ('t' (code 116)): was expecting double-quote to start field name\n at [Source: org.elasticsearch.transport.netty4.ByteBufStreamInput@3abb9f17; line: 1, column: 3]&quot;
+      }
+    ],
+    &quot;type&quot; : &quot;json_parse_exception&quot;,
+    &quot;reason&quot; : &quot;Unexpected character ('t' (code 116)): was expecting double-quote to start field name\n at [Source: org.elasticsearch.transport.netty4.ByteBufStreamInput@3abb9f17; line: 1, column: 3]&quot;
+  },
+  &quot;status&quot; : 500
+}
+</code></pre>
+
+<p>POSTではなくPUTでリクエストしてしまった場合</p>
+
+<pre><code class="language-sh">$ curl -H &quot;Content-Type: application/json&quot; -XPUT 'localhost:9200/product/book/1/_update?pretty' -d '
+{
+  &quot;doc&quot; : {
+      &quot;title&quot; : &quot;Elasticsearch v7.3&quot;
+  }
+}'
+{
+  &quot;error&quot; : &quot;Incorrect HTTP method for uri [/product/book/1/_update?pretty] and method [PUT], allowed: [POST]&quot;,
+  &quot;status&quot; : 405
 }
 </code></pre>
 
