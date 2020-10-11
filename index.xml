@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>きまいのテックろぐ</title>
@@ -6,11 +6,7 @@
     <description>Recent content on きまいのテックろぐ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Wed, 18 Sep 2019 09:00:00 +0900</lastBuildDate>
-    
-	<atom:link href="https://kenji-imi.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 18 Sep 2019 09:00:00 +0900</lastBuildDate><atom:link href="https://kenji-imi.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker上のElasticsearchをcurlで操作する</title>
       <link>https://kenji-imi.github.io/2019/09/18/docker%E4%B8%8A%E3%81%AEelasticsearch%E3%82%92curl%E3%81%A7%E6%93%8D%E4%BD%9C%E3%81%99%E3%82%8B/</link>
@@ -18,9 +14,9 @@
       
       <guid>https://kenji-imi.github.io/2019/09/18/docker%E4%B8%8A%E3%81%AEelasticsearch%E3%82%92curl%E3%81%A7%E6%93%8D%E4%BD%9C%E3%81%99%E3%82%8B/</guid>
       <description>概要 Docker 上の Elasticsearch を curl で API 操作してみます。
-環境 $ sw_vers ProductName:	Mac OS X ProductVersion:	10.14.6 BuildVersion:	18G87  Elasticsearch 用 docker-compose 今回は、docker コンテナを起動して、その中で Elasticsearch を起動します。 docker コンテナを起動するために、docker-compose を利用します。 Elasticsearch 用の Docker イメージや docker-compose.yml 等の情報は以下公式ドキュメントにまとまっています。
+環境 $ sw_vers ProductName:	Mac OS X ProductVersion:	10.14.6 BuildVersion:	18G87 Elasticsearch 用 docker-compose 今回は、docker コンテナを起動して、その中で Elasticsearch を起動します。 docker コンテナを起動するために、docker-compose を利用します。 Elasticsearch 用の Docker イメージや docker-compose.yml 等の情報は以下公式ドキュメントにまとまっています。
  Install Elasticsearch with Docker | Elasticsearch Reference | Elastic  今回用いる docker-compose.yml は以下。
-version: &amp;quot;3.3&amp;quot; services: es01: image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0 container_name: es01 environment: - &amp;quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&amp;quot; - &amp;quot;discovery.type=single-node&amp;quot; ulimits: memlock: soft: -1 hard: -1 volumes: - esdata01:/usr/share/elasticsearch/data ports: - 9200:9200 networks: - esnet volumes: esdata01: driver: local networks: esnet:  Docker コンテナ起動</description>
+version: &amp;#34;3.3&amp;#34; services: es01: image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0 container_name: es01 environment: - &amp;#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&amp;#34; - &amp;#34;discovery.type=single-node&amp;#34; ulimits: memlock: soft: -1 hard: -1 volumes: - esdata01:/usr/share/elasticsearch/data ports: - 9200:9200 networks: - esnet volumes: esdata01: driver: local networks: esnet: Docker コンテナ起動</description>
     </item>
     
     <item>
@@ -29,8 +25,8 @@ version: &amp;quot;3.3&amp;quot; services: es01: image: docker.elastic.co/elasti
       <pubDate>Tue, 17 Sep 2019 09:00:00 +0900</pubDate>
       
       <guid>https://kenji-imi.github.io/2019/09/17/elasticsarch%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6/</guid>
-      <description> 概要 最近、業務で使う可能性があるということでElasticsearchについて調べています。 今回は「データ分析基盤構築入門」を読んだのでその内容を列挙。
-歴史  分散型全文検索サーバー Shay Banonが2010年にOSSとしてリリース 全文検索ライブラリ Apache Lucene をコアに利用 Elastic社によって開発・メンテナンスされている  特徴  OSS (Apache License v2)  GitHub上でオープンソースとして公開されており、修正の報告やパッチも簡単に作成できる  ドキュメント指向  ドキュメント単位でフィールドの定義が出来るため、柔軟なデータの登録ができる スキーマフリー  分散システム  インデックスを分散して保持し、検索する。スケールアウトを当初から想定した設計  マルチテナント  複数のインデックスを登録できる  RESTfulなAPI  データの操作や設定・監視などの必要な機能がHTTPインターフェースで利用できる  (near)リアルタイム  (ほぼ)データをリアルタイムに検索できる   Elastic Stack  データの取り込みツールのLogstack、Beats、データストアElasticsearch、データ可視化ツールKibanaをまとめた総称 Elastic社によって開発されているOSS群をまとめた総称 version5.0からはElastic Stackのすべてのプロダクトが同時にリリースされるようになりました 統一されたテストも行われるので、組み合わせて利用する利点が増えてきている  アーキテクチャ  ノード  Elasticsearchの1プロセスに相当 同一サーバー内で複数のノードを起動することも出来る ノードは個別の名前やIDによって識別できる ノード名はデフォルトでは、UUIDの先頭7文字が使用される 内部的なノードIDとしてUUIDが利用される  クラスタ  複数のノードを1つのElasticsearchとして動作させることができ、このノード群のこと クラスタ構成にすることで、大量のデータを複数のノードに分散して保持出来る 可用性や検索性能の向上のためにクラスタ内でレプリカを持つことも出来る クラスタへのデータ登録・検索、これらのノードへのリクエストに変換され、各ノードで処理が実行される クラスタを構成するには、各ノードに同一のクラスタ名を指定する クラスタ名はデフォルト elasticsearch  ドキュメント  RDBMSの1レコードに相当 Elasticsearchが扱うデータの最小単位 データ形式は、通常JSON形式 Elasticsearchはスキーマフリー、各ドキュメントは異なった構造を持つことが出来る 複数のフィールドから構成され、共通項目（フィールド）は同一の型を持つ必要がある  フィールド  RDBMSのカラムに相当 フィールド毎に型を指定出来る フィールドの設定は検索、表示に影響 どのような検索がしたいのか、どのようにフィールドを利用するのか  インデックス  ドキュメントの集合 基本インデックス単位でデータを管理 インデックスがクラスタのノードに分散して保持されることで、大量のデータを扱うことが出来る インデックをノードに分散するための単位はシャード  タイプ（インデックスタイプ）  インデックスに登録するドキュメントを論理的に分類するための機能 タイプを用いることで、インデックスに様々な種類のドキュメントを保存可能、管理も容易に 1ドキュメント このタイプを1つだけ指定できる 1インデックス 複数のタイプを利用できる インデックスの異なるタイプでも、同じフィールドは同じ型を利用しないといけないなどの制限がある =&amp;gt; 1インデックス1タイプを推奨（今は必須？）  シャード（セグメント）  小さな単位に分割したインデックス 他のデータストアではパーティションなどと呼ばれることもある このシャードをクラスタの各ノードに割り当てることでデータを分散させている このシャードの数がデータ分散させる事ができる上限数 1つのインデックスをいくつのシャードに分散するかという設定、インデックス作成時のみ設定可能 Reindex APIを利用することで、別インデックスにデータを再登録出来る 新しいインデックスのシャード数を変更することでシャードの分割数を変更できる  プライマリシャード/レプリカシャード  シャード、プライマリとレプリカがある データ登録リクエストが来ると、プライマリシャードにデータを保存、それからレプリカシャードにデータコピー レプリカシャードは、プライマリシャードのコピー  マッピング  インデックスに保存されるデータの構造を定義 タイプ毎にドキュメントのフィールドがどのような名前で、どのような型のデータを保存するか記述  転置インデックス  インデックス（シャード）はApache Luceneを使ってデータを管理   </description>
+      <description>概要 最近、業務で使う可能性があるということでElasticsearchについて調べています。 今回は「データ分析基盤構築入門」を読んだのでその内容を列挙。
+歴史  分散型全文検索サーバー Shay Banonが2010年にOSSとしてリリース 全文検索ライブラリ Apache Lucene をコアに利用 Elastic社によって開発・メンテナンスされている  特徴  OSS (Apache License v2)  GitHub上でオープンソースとして公開されており、修正の報告やパッチも簡単に作成できる   ドキュメント指向  ドキュメント単位でフィールドの定義が出来るため、柔軟なデータの登録ができる スキーマフリー   分散システム  インデックスを分散して保持し、検索する。スケールアウトを当初から想定した設計   マルチテナント  複数のインデックスを登録できる   RESTfulなAPI  データの操作や設定・監視などの必要な機能がHTTPインターフェースで利用できる   (near)リアルタイム  (ほぼ)データをリアルタイムに検索できる    Elastic Stack  データの取り込みツールのLogstack、Beats、データストアElasticsearch、データ可視化ツールKibanaをまとめた総称 Elastic社によって開発されているOSS群をまとめた総称 version5.0からはElastic Stackのすべてのプロダクトが同時にリリースされるようになりました 統一されたテストも行われるので、組み合わせて利用する利点が増えてきている  アーキテクチャ  ノード  Elasticsearchの1プロセスに相当 同一サーバー内で複数のノードを起動することも出来る ノードは個別の名前やIDによって識別できる ノード名はデフォルトでは、UUIDの先頭7文字が使用される  内部的なノードIDとしてUUIDが利用される     クラスタ  複数のノードを1つのElasticsearchとして動作させることができ、このノード群のこと クラスタ構成にすることで、大量のデータを複数のノードに分散して保持出来る 可用性や検索性能の向上のためにクラスタ内でレプリカを持つことも出来る クラスタへのデータ登録・検索、これらのノードへのリクエストに変換され、各ノードで処理が実行される クラスタを構成するには、各ノードに同一のクラスタ名を指定する クラスタ名はデフォルト elasticsearch   ドキュメント  RDBMSの1レコードに相当 Elasticsearchが扱うデータの最小単位 データ形式は、通常JSON形式 Elasticsearchはスキーマフリー、各ドキュメントは異なった構造を持つことが出来る 複数のフィールドから構成され、共通項目（フィールド）は同一の型を持つ必要がある   フィールド  RDBMSのカラムに相当 フィールド毎に型を指定出来る フィールドの設定は検索、表示に影響  どのような検索がしたいのか、どのようにフィールドを利用するのか     インデックス  ドキュメントの集合 基本インデックス単位でデータを管理 インデックスがクラスタのノードに分散して保持されることで、大量のデータを扱うことが出来る インデックをノードに分散するための単位はシャード   タイプ（インデックスタイプ）  インデックスに登録するドキュメントを論理的に分類するための機能 タイプを用いることで、インデックスに様々な種類のドキュメントを保存可能、管理も容易に 1ドキュメント  このタイプを1つだけ指定できる   1インデックス  複数のタイプを利用できる インデックスの異なるタイプでも、同じフィールドは同じ型を利用しないといけないなどの制限がある =&amp;gt; 1インデックス1タイプを推奨（今は必須？）     シャード（セグメント）  小さな単位に分割したインデックス 他のデータストアではパーティションなどと呼ばれることもある このシャードをクラスタの各ノードに割り当てることでデータを分散させている このシャードの数がデータ分散させる事ができる上限数 1つのインデックスをいくつのシャードに分散するかという設定、インデックス作成時のみ設定可能 Reindex APIを利用することで、別インデックスにデータを再登録出来る 新しいインデックスのシャード数を変更することでシャードの分割数を変更できる   プライマリシャード/レプリカシャード  シャード、プライマリとレプリカがある データ登録リクエストが来ると、プライマリシャードにデータを保存、それからレプリカシャードにデータコピー レプリカシャードは、プライマリシャードのコピー   マッピング  インデックスに保存されるデータの構造を定義 タイプ毎にドキュメントのフィールドがどのような名前で、どのような型のデータを保存するか記述   転置インデックス  インデックス（シャード）はApache Luceneを使ってデータを管理    </description>
     </item>
     
     <item>
@@ -40,7 +36,7 @@ version: &amp;quot;3.3&amp;quot; services: es01: image: docker.elastic.co/elasti
       
       <guid>https://kenji-imi.github.io/profile/</guid>
       <description>kenji imai
-経歴  フリーランスエンジニア (2016&amp;frasl;7 -)  株式会社メルペイ (2018&amp;frasl;7 -) 株式会社オプティム (2018&amp;frasl;2 - 2018&amp;frasl;6)  CIOS ファイルストレージ API 開発改善: link  株式会社リクルートテクノロジーズ (2016&amp;frasl;7 - 2018&amp;frasl;1)  TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成   ヤフー株式会社 (2007&amp;frasl;4 - 2016&amp;frasl;6)  「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!ロコ」iOS アプリ開発 内製検索エンジンライブラリ/プラットフォーム開発  明治大学院大学 理工学研究科 基礎理工学専攻 修士 (2005&amp;frasl;4 - 2007&amp;frasl;3) 明治大学 理工学部 情報科学科 学士 (2001&amp;frasl;4 - 2005&amp;frasl;3)  スキル  Golang, Python Git, Docker, REST API, gRPC, GCP マイクロサービス, レイヤードアーキテクチャ, 検索システム  Web サイト  https://github.</description>
+経歴  フリーランスバックエンドエンジニア (2016/7 -)  株式会社メルペイ (2018/7 -) 株式会社オプティム (2018/2 - 2018/6)  CIOS ファイルストレージ API 開発改善: link   株式会社リクルートテクノロジーズ (2016/7 - 2018/1)  TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成     ヤフー株式会社 (2007/4 - 2016/6)  「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!ロコ」iOS アプリ開発 内製検索エンジンライブラリ/プラットフォーム開発   明治大学院大学 理工学研究科 基礎理工学専攻 修士 (2005/4 - 2007/3) 明治大学 理工学部 情報科学科 学士 (2001/4 - 2005/3)  スキル  Golang, Python Git, Docker, REST API, gRPC, GCP マイクロサービス, レイヤードアーキテクチャ, 検索システム  Web サイト  https://github.</description>
     </item>
     
     <item>
