@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>きまいのテックろぐ</title>
+    <title>きまいボックス</title>
     <link>https://kenji-imi.github.io/</link>
-    <description>Recent content on きまいのテックろぐ</description>
+    <description>Recent content on きまいボックス</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Wed, 18 Sep 2019 09:00:00 +0900</lastBuildDate><atom:link href="https://kenji-imi.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -36,7 +36,7 @@ version: &amp;#34;3.3&amp;#34; services: es01: image: docker.elastic.co/elastics
       
       <guid>https://kenji-imi.github.io/profile/</guid>
       <description>kenji imai
-経歴  フリーランスバックエンドエンジニア (2016/7 -)  株式会社メルペイ (2018/7 -) 株式会社オプティム (2018/2 - 2018/6)  CIOS ファイルストレージ API 開発改善: link   株式会社リクルートテクノロジーズ (2016/7 - 2018/1)  TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成     ヤフー株式会社 (2007/4 - 2016/6)  「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!ロコ」iOS アプリ開発 内製検索エンジンライブラリ/プラットフォーム開発   明治大学院大学 理工学研究科 基礎理工学専攻 修士 (2005/4 - 2007/3) 明治大学 理工学部 情報科学科 学士 (2001/4 - 2005/3)  スキル  Golang, Python Git, Docker, REST API, gRPC, GCP マイクロサービス, レイヤードアーキテクチャ, 検索システム  Web サイト  https://github.</description>
+経歴  フリーランスバックエンドエンジニア (2016/7 -)  株式会社メルペイ (2018/7 - 2020/9/30)  決済プラットフォーム: link 加盟店管理画面: link 近くで使えるお店: link(design用しか見つからず..) スマート払い(後払い)/定額払い: link システム構成参考: link, link   株式会社オプティム (2018/2 - 2018/6)  CIOS ファイルストレージ API 開発改善: link   株式会社リクルートテクノロジーズ (2016/7 - 2018/1)  TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成     ヤフー株式会社 (2007/4 - 2016/6)  「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!ロコ」iOS アプリ開発 内製検索エンジンライブラリ/プラットフォーム開発   明治大学院大学 理工学研究科 基礎理工学専攻 修士 (2005/4 - 2007/3) 明治大学 理工学部 情報科学科 学士 (2001/4 - 2005/3)  スキル  Golang, Python Git, Docker, REST API, gRPC, GCP マイクロサービス, レイヤードアーキテクチャ, 検索システム  Web サイト  https://github.</description>
     </item>
     
     <item>
