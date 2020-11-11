@@ -1,3 +1,3 @@
-# kenji-imi.github.io
+# kimai07.github.io
 
-https://kenji-imi.github.io/
+https://kimai07.github.io/
