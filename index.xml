@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>きまいボックス</title>
+    <title>いまろぐ</title>
     <link>https://kimai07.github.io/</link>
-    <description>Recent content on きまいボックス</description>
+    <description>Recent content on いまろぐ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Sat, 07 Sep 2019 20:55:17 +0900</lastBuildDate><atom:link href="https://kimai07.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -14,7 +14,7 @@
       
       <guid>https://kimai07.github.io/profile/</guid>
       <description>kenji imai
-経歴  フリーランスバックエンドエンジニア (2016/7 -)  株式会社メルペイ (2018/7 - 2020/9/30)  決済プラットフォーム: link 加盟店管理画面: link 近くで使えるお店: link(design用しか見つからず..) スマート払い(後払い)/定額払い: link システム構成参考資料: link, link   株式会社オプティム (2018/2 - 2018/6)  CIOS ファイルストレージ API 開発改善: link 参考資料: link, OPTiM Store API Docs   株式会社リクルートテクノロジーズ (2016/7 - 2018/1)  TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成     ヤフー株式会社 (2007/4 - 2016/6)  「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!</description>
+経歴 株式会社ZOZO (2022/01 - ) 検索システム開発改善 参考資料: link link フリーランスバックエンドエンジニア (2016/07 - 2021/12) 株式会社ZOZO (2020/12 - 2021/12) 検索システム開発改善 参考資料: link 株式会社メルペイ (2018/7 - 2020/09) 決済プラットフォーム: link 加盟店管理画面: link 近くで使えるお店: link(design用しか見つからず..) スマート払い(後払い)/定額払い: link システム構成参考資料: link, link 株式会社オプティム (2018/02 - 2018/06) CIOS ファイルストレージ API 開発改善: link 参考資料: link, OPTiM Store API Docs 株式会社リクルートテクノロジーズ (2016/07 - 2018/01) TextSuggestAPI 開発改善: link 斡旋・中途採用検索・レコメンドデータ生成 ヤフー株式会社 (2007/04 - 2016/06) 「Y!ショッピング」商品レコメンドエンジン開発改善 「Y!ショッピング」検索クエリ自動補完 ML モデリング・API 新規開発 「Y!ローカルサーチ」API 開発改善: link 「LocoClip from Yahoo!</description>
     </item>
     
   </channel>
